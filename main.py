@@ -25,8 +25,8 @@ from .webui import WebUIServer
     "HybridMemory",
     "lxfight",
     "整合长期记忆与短期记忆的混合记忆系统，支持动态生命周期和WebUI管理",
-    "1.0.1",
-    "https://github.com/your-repo/hybrid_memory",
+    "1.0.02",
+    "https://github.com/taolicx/hybrid_memory",
 )
 class HybridMemoryPlugin(Star):
     """HybridMemory 插件主类"""

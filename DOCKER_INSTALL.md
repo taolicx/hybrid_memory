@@ -42,31 +42,20 @@ cp -r ./hybrid_memory/* /opt/astrbot/plugins/hybrid_memory/
 ```bash
 docker run -d \
   --name astrbot \
-  -v astrbot_data:/app/data \
-  -v /opt/astrbot/plugins/hybrid_memory:/app/data/plugins/hybrid_memory \
+  -v /vol1/1000/docker/astrbot/data:/AstrBot/data \
+  -p 3200:3000 \
   -p 9241:9241 \
-  -p 3000:3000 \
   --restart unless-stopped \
-  your_astronano/astrbot:latest
+  soulter/astrbot:latest
 ```
 
-> **注意**：将 `your_astronano/astrbot:latest` 替换为你实际使用的镜像
-
-#### 5. 进入容器安装依赖
+#### 5. 安装依赖
 
 ```bash
-docker exec -it astrbot bash
+docker exec astrbot pip install aiohttp
 ```
 
-在容器内安装 Python 依赖：
-
-```bash
-pip install aiohttp
-```
-
-#### 6. 重启插件
-
-在 AstrBot 管理界面重启插件，或在容器内执行：
+#### 6. 重启容器
 
 ```bash
 docker restart astrbot
@@ -85,20 +74,20 @@ docker exec -it astrbot bash
 #### 2. 创建插件目录
 
 ```bash
-mkdir -p /app/data/plugins/hybrid_memory
+mkdir -p /AstrBot/data/plugins/hybrid_memory
 ```
 
 #### 3. 安装依赖
 
 ```bash
-pip install aiohttp faiss-cpu numpy
+pip install aiohttp
 ```
 
 如果网络问题导致安装失败，可以：
 
 ```bash
 # 使用国内镜像
-pip install aiohttp faiss-cpu numpy -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install aiohttp -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 #### 4. 复制插件文件
@@ -107,7 +96,7 @@ pip install aiohttp faiss-cpu numpy -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 ```bash
 # 在宿主机执行
-docker cp ./hybrid_memory/. astrbot:/app/data/plugins/hybrid_memory/
+docker cp ./hybrid_memory/. astrbot:/AstrBot/data/plugins/hybrid_memory/
 ```
 
 #### 5. 重启容器
@@ -127,18 +116,15 @@ version: '3.8'
 
 services:
   astrbot:
-    image: your_astronano/astrbot:latest
+    image: soulter/astrbot:latest
     container_name: astrbot
     ports:
-      - "3000:3000"
+      - "3200:3000"
       - "9241:9241"
     volumes:
-      - astrbot_data:/app/data
-      - ./plugins/hybrid_memory:/app/data/plugins/hybrid_memory  # 添加这行
+      - /vol1/1000/docker/astrbot/data:/AstrBot/data
+      - ./plugins/hybrid_memory:/AstrBot/data/plugins/hybrid_memory
     restart: unless-stopped
-
-volumes:
-  astrbot_data:
 ```
 
 然后执行：
@@ -146,7 +132,7 @@ volumes:
 ```bash
 docker-compose down
 docker-compose up -d
-docker exec -it astrbot pip install aiohttp
+docker exec astrbot pip install aiohttp
 docker restart astrbot
 ```
 
@@ -159,7 +145,7 @@ docker restart astrbot
 在容器内执行：
 
 ```bash
-docker exec -it astrbot bash -c "ls -la /app/data/plugins/hybrid_memory/"
+docker exec astrbot ls -la /AstrBot/data/plugins/hybrid_memory/
 ```
 
 应该能看到插件文件列表。
@@ -184,33 +170,13 @@ docker exec -it astrbot bash -c "ls -la /app/data/plugins/hybrid_memory/"
 
 ---
 
-## 配置修改
-
-### 修改 WebUI 端口
-
-如果 9241 端口被占用，可以修改配置：
-
-```bash
-docker exec -it astrbot vi /app/data/plugins/hybrid_memory/_conf_schema.json
-```
-
-修改 `webui.port` 的 default 值。
-
-或者在 AstrBot 管理界面配置。
-
-### 修改登录密码
-
-同样在 `_conf_schema.json` 中修改 `webui.password`。
-
----
-
 ## 常见问题
 
 ### Q: 插件没有加载
 
 A: 检查插件目录名称是否为 `hybrid_memory`，确保目录结构正确：
 ```
-/app/data/plugins/hybrid_memory/
+/AstrBot/data/plugins/hybrid_memory/
 ├── main.py
 ├── metadata.yaml
 ├── core/
@@ -221,7 +187,7 @@ A: 检查插件目录名称是否为 `hybrid_memory`，确保目录结构正确�
 
 A: 尝试使用国内镜像：
 ```bash
-pip install aiohttp faiss-cpu numpy -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install aiohttp -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ### Q: WebUI 无法访问
@@ -233,29 +199,23 @@ docker port astrbot
 
 ### Q: 数据存储在哪里
 
-A: 插件数据存储在 Docker 卷 `astrbot_data` 中：
-```
-docker volume inspect astrbot_data
-```
+A: 插件数据存储在 `/vol1/1000/docker/astrbot/data/plugins/hybrid_memory/` 目录中
 
 ---
 
 ## 更新插件
 
 1. 停止容器
-2. 备份数据
+2. 备份数据（如需要）
 3. 更新文件
-4. 重新安装依赖
-5. 重启容器
+4. 重启容器
 
 ```bash
 docker stop astrbot
 # 备份插件数据（可选）
-docker cp astrbot:/app/data/plugins/hybrid_memory/storage ./backup_storage
+cp -r /vol1/1000/docker/astrbot/data/plugins/hybrid_memory ./backup_hybrid_memory
 # 更新文件
-cp -r ./hybrid_memory_new/* /opt/astrbot/plugins/hybrid_memory/
-# 重新安装依赖
-docker exec -it astrbot pip install aiohttp
+cp -r ./hybrid_memory/* /vol1/1000/docker/astrbot/data/plugins/hybrid_memory/
 docker start astrbot
 ```
 

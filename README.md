@@ -3,7 +3,7 @@
 整合长期记忆与短期记忆的混合记忆系统插件，专为 AstrBot 设计。
 
 [![AstrBot](https://img.shields.io/badge/AstrBot-Plugin-blue)](https://github.com/SoulTer/AstrBot)
-[![License](https://img.shields.io/github/license/lxfight/hybrid_memory)](LICENSE)
+[![License](https://img.shields.io/github/license/taolicx/hybrid_memory)](LICENSE)
 
 ## 简介
 
@@ -15,10 +15,10 @@ HybridMemory 是基于 [LivingMemory](https://github.com/lxfight-s-Astrbot-Plugi
 
 ## 功能特性
 
-### 长期记忆 (基于 LivingMemory)
-- **向量语义搜索**: 使用 Faiss 向量数据库存储记忆，支持语义相似度检索
+### 长期记忆
+- **文本搜索**: 使用 SQLite 存储记忆，支持文本匹配检索
 - **动态生命周期**: 记忆具有重要性评分，可随时间自动衰减
-- **持久化存储**: SQLite + 向量索引的双重存储机制
+- **持久化存储**: SQLite 数据库存储
 
 ### 短期记忆 (基于 Mnemosyne)
 - **会话级临时存储**: 按会话分开存储对话历史
@@ -81,11 +81,11 @@ AstrBot/
 - `main.py`
 - `metadata.yaml`
 - `requirements.txt`
-- `_conf_schema.json`
 - `README.md`
+- `DOCKER_INSTALL.md`
+- `.gitignore`
 - `core/` 目录
 - `webui/` 目录
-- `storage/` 目录（如有）
 
 #### 3. 安装依赖
 
@@ -215,12 +215,9 @@ WebUI: 已启用
 插件数据存储在 `{plugin_data_dir}/` 目录下：
 
 ```
-{plugin_data_dir}/storage/
+{plugin_data_dir}/
 ├── long_term_memory.db     # 长期记忆 SQLite 数据库
-├── short_term_memory.db    # 短期记忆 SQLite 数据库
-└── vector_index/          # Faiss 向量索引
-    ├── index.faiss
-    └── metadata.json
+└── short_term_memory.db    # 短期记忆 SQLite 数据库
 ```
 
 ---
@@ -274,7 +271,7 @@ A: 删除插件目录下的 `storage` 文件夹并重启（会重置所有数据
 
 ## 更新日志
 
-### v1.0.0
+### v1.0.02
 - 初始版本
 - 整合长期记忆与短期记忆
 - 添加 WebUI 管理面板
