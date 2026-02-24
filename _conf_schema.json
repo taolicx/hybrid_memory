@@ -1,0 +1,108 @@
+{
+  "order": 1,
+  "title": "混合记忆设置",
+  "schema": [
+    {
+      "type": "group",
+      "title": "长期记忆设置",
+      "children": [
+        {
+          "name": "long_term_memory.embedding_provider",
+          "label": "Embedding Provider",
+          "type": "str",
+          "default": "",
+          "description": "选择用于向量化的Embedding Provider"
+        },
+        {
+          "name": "long_term_memory.llm_provider",
+          "label": "LLM Provider",
+          "type": "str",
+          "default": "",
+          "description": "选择用于总结的LLM Provider"
+        },
+        {
+          "name": "long_term_memory.decay_enabled",
+          "label": "启用记忆衰减",
+          "type": "bool",
+          "default": true,
+          "description": "启用后，长期记忆会根据时间自动降低重要性"
+        },
+        {
+          "name": "long_term_memory.decay_days",
+          "label": "记忆衰减天数",
+          "type": "int",
+          "default": 30,
+          "description": "记忆多少天后开始衰减"
+        },
+        {
+          "name": "long_term_memory.retrieval_top_k",
+          "label": "检索返回数量",
+          "type": "int",
+          "default": 5,
+          "description": "每次检索返回的记忆数量"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "title": "短期记忆设置",
+      "children": [
+        {
+          "name": "short_term_memory.summary_threshold",
+          "label": "总结阈值",
+          "type": "int",
+          "default": 20,
+          "description": "多少条消息后自动总结会话"
+        },
+        {
+          "name": "short_term_memory.max_messages",
+          "label": "最大消息数",
+          "type": "int",
+          "default": 50,
+          "description": "每个会话保留的最大消息数"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "title": "WebUI设置",
+      "children": [
+        {
+          "name": "webui.enabled",
+          "label": "启用WebUI",
+          "type": "bool",
+          "default": true,
+          "description": "是否启用WebUI管理界面"
+        },
+        {
+          "name": "webui.host",
+          "label": "监听地址",
+          "type": "str",
+          "default": "127.0.0.1",
+          "description": "WebUI监听地址"
+        },
+        {
+          "name": "webui.port",
+          "label": "监听端口",
+          "type": "int",
+          "default": 9241,
+          "description": "WebUI监听端口"
+        },
+        {
+          "name": "webui.username",
+          "label": "用户名",
+          "type": "str",
+          "default": "admin",
+          "description": "WebUI登录用户名"
+        },
+        {
+          "name": "webui.password",
+          "label": "密码",
+          "type": "str",
+          "default": "admin",
+          "description": "WebUI登录密码"
+        }
+      ]
+    }
+  ]
+}

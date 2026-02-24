@@ -1,0 +1,5 @@
+name: HybridMemory
+author: lxfight
+description: 整合长期记忆与短期记忆的混合记忆插件，支持动态生命周期和WebUI管理
+version: 1.0.0
+repo: https://github.com/your-repo/hybrid_memory
