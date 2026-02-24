@@ -43,7 +43,7 @@ HybridMemory 是基于 [LivingMemory](https://github.com/lxfight-s-Astrbot-Plugi
 
 或者使用命令行：
 ```bash
-git clone https://github.com/你的用户名/hybrid_memory.git
+git clone https://github.com/taolicx/hybrid_memory.git
 ```
 
 ### 1. 安装依赖
